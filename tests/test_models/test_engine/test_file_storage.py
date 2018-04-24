@@ -168,3 +168,20 @@ class testFileStorage(unittest.TestCase):
         all_obj = models.storage.all('State')
         count_all_obj = models.storage.count('State')
         self.assertEqual(len(all_obj), count_all_obj)
+
+    def test_get_method_cls(self):
+        '''
+            Tests the get method with class name and id given
+        '''
+        state = State(name='Texas')
+        state.save()
+        state_id = state.id
+        get_state = models.storage.get('State', state_id)
+        self.assertEqual(state, get_state)
+
+    def test_get_method(self):
+        '''
+            Tests the get method
+        '''
+        get_state = models.storage.get('State', '12343')
+        self.assertEqual(get_state, None)
