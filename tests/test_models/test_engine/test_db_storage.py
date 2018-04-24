@@ -65,3 +65,36 @@ class testDBStorage(unittest.TestCase):
         all_stored = models.storage.all()
         models.storage.delete(state)
         self.assertTrue(all_stored["State." + state.id])
+
+    def test_get_count_all(self):
+        '''
+            Tests the count method in db_storage
+        '''
+        all_obj = models.storage.all()
+        count_all_obj = models.storage.count()
+        self.assertEqual(len(all_obj), count_all_obj)
+
+    def test_get_count_cls(self):
+        '''
+            Tests the count method in db_storage with class name given
+        '''
+        all_obj = models.storage.all('State')
+        count_all_obj = models.storage.count('State')
+        self.assertEqual(len(all_obj), count_all_obj)
+
+    def test_get_method(self):
+        '''
+            Tests the get method
+        '''
+        state = State(name="Texas")
+        state.save()
+        state_id = state.id
+        get_state = models.storage.get('State', state_id)
+        self.assertEqual(state, get_state)
+
+    def test_get_method_cls(self):
+        '''
+            Tests the get method without instance id
+        '''
+        get_state = models.storage.get('State', 'jlk124343')
+        self.assertEqual(get_state, None)
