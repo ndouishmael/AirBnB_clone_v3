@@ -41,13 +41,13 @@ def delete_users(u_id):
 @app_views.route('/users', methods=["POST"], strict_slashes=False)
 def create_users():
     ''' Creates an User'''
-    try:
-        content = request.get_json()
-    except:
+
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
     email = content.get("email")
     if email is None:
-        return (jsonify({"error": "Missing email"}))
+        return (jsonify({"error": "Missing email"}), 400)
     password = content.get("password")
     if password is None:
         return (jsonify({"error": "Missing password"}), 400)
@@ -63,9 +63,8 @@ def create_users():
 def update_users(u_id):
     ''' updates an user'''
 
-    try:
-        content = request.get_json()
-    except:
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
 
     my_user = storage.get("User", u_id)
