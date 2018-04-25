@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 ''' blueprint for state '''
 from api.v1.views import app_views
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from models import storage
 from models import State
 
@@ -13,7 +13,7 @@ def state(state_id=None):
     if state_id is None:
         states = storage.all("State")
         my_states = [value.to_dict() for key, value in states.items()]
-        return jsonify(my_states)
+        return (jsonify(my_states), 200)
 
     my_states = storage.get("State", state_id)
     if my_states is not None:
@@ -29,7 +29,7 @@ def delete_states(s_id):
     if my_state is None:
         abort(404)
     storage.delete(my_state)
-    return (jsonify({}))
+    return (jsonify({}), 200)
 
 
 @app_views.route('/states', methods=["POST"], strict_slashes=False)
@@ -38,10 +38,10 @@ def post_states():
     try:
         content = request.get_json()
     except:
-        return (jsonify({"error": "Not a JSON"}), 400)
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
     name = content.get("name")
     if name is None:
-        return (jsonify({"error": "Missing name"}), 400)
+        return make_response(jsonify({"error": "Missing name"}), 400)
 
     new_state = State()
     new_state.name = name
@@ -57,7 +57,7 @@ def update_states(state_id):
     try:
         content = request.get_json()
     except:
-        return (jsonify({"error": "Not a JSON"}), 400)
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
 
     my_state = storage.get("State", state_id)
     if my_state is None:
