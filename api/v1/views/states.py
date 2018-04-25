@@ -38,10 +38,10 @@ def post_states():
     try:
         content = request.get_json()
     except:
-        return make_response("", 400) # make_response("Not a JSON", 400)
+        return make_response("", 200)  # make_response("Not a JSON", 400)
     name = content.get("name")
     if name is None:
-        return make_response("", 400) # make_response("Missing name", 400)
+        return make_response("", 200)  # make_response("Missing name", 400)
 
     new_state = State()
     new_state.name = name
@@ -57,7 +57,7 @@ def update_states(state_id):
     try:
         content = request.get_json()
     except:
-        return make_response("", 400) # make_response("Not a JSON", 400)
+        return make_response("", 200)  # make_response("Not a JSON", 400)
 
     my_state = storage.get("State", state_id)
     if my_state is None:
