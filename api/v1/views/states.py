@@ -44,8 +44,7 @@ def post_states():
     if name is None:
         return (jsonify({"error": "Missing name"}), 400)
 
-    new_state = State()
-    new_state.name = name
+    new_state = State(**content)
     new_state.save()
 
     return (jsonify(new_state.to_dict()), 201)
