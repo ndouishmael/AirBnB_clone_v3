@@ -53,9 +53,8 @@ def delete_review(review_id):
                  methods=["POST"], strict_slashes=False)
 def create_review(place_id):
 
-    try:
-        content = request.get_json()
-    except:
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
 
     my_place = storage.get("Place", place_id)
@@ -93,9 +92,8 @@ def update_review(review_id):
     if my_review is None:
         abort(404)
 
-    try:
-        content = request.get_json()
-    except:
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
 
     not_allowed = ["id", "created_at", "updated_at", "user_id", "place_id"]
