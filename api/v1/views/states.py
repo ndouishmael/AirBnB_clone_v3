@@ -63,8 +63,9 @@ def update_states(state_id):
     if my_state is None:
         abort(404)
 
+    not_allowed = ["id", "created_at", "updated_at"]
     for key, value in content.items():
-        if key != "id" or key != "created_at" or key != "updated_at":
+        if key not in not_allowed:
             setattr(my_state, key, value)
 
     my_state.save()
