@@ -42,19 +42,18 @@ def delete_cities(c_id):
 @app_views.route('/states/<id>/cities', methods=["POST"], strict_slashes=False)
 def post_cities(id):
     ''' Post a new city '''
-    try:
-        content = request.get_json()
-    except:
+
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
+
     name = content.get("name")
     if name is None:
         return (jsonify({"error": "Missing name"}), 400)
     my_state = storage.get('State', id)
     if my_state is None:
         abort(404)
-    new_city = City()
-    new_city.state_id = id
-    new_city.name = name
+    new_city = City(**content)
     new_city.save()
 
     return (jsonify(new_city.to_dict()), 201)
@@ -64,17 +63,17 @@ def post_cities(id):
 def update_cities(city_id):
     ''' update city object attributes with PUT method'''
 
-    try:
-        content = request.get_json()
-    except:
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
 
     my_city = storage.get("City", city_id)
     if my_city is None:
         abort(404)
 
+    not_allowed = ["id", "created_at", "updated_at", "state_id"]
     for key, value in content.items():
-        if key != "id" or key != "created_at" or key != "updated_at":
+        if key not in not_allowed:
             setattr(my_city, key, value)
 
     my_city.save()
