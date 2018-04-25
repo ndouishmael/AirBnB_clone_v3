@@ -12,7 +12,7 @@ import os
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["0.0.0.0"]}})
 
-app.register_blueprint(app_views)
+app.register_blueprint(app_views, url_prefix='/api/v1')
 
 
 @app.errorhandler(404)
