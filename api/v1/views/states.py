@@ -36,9 +36,12 @@ def delete_states(s_id):
 @app_views.route('/states', methods=["POST"], strict_slashes=False)
 def post_states():
 
-    try:
-        content = request.get_json()
-    except:
+    # try:
+    #     content = request.get_json()
+    # except:
+    #     return (jsonify({"error": "Not a JSON"}), 400)
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
     name = content.get("name")
     if name is None:
@@ -54,9 +57,12 @@ def post_states():
 def update_states(state_id):
     '''Updates a state'''
 
-    try:
-        content = request.get_json()
-    except:
+    # try:
+    #     content = request.get_json()
+    # except:
+    #     return (jsonify({"error": "Not a JSON"}), 400)
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
 
     my_state = storage.get("State", state_id)
