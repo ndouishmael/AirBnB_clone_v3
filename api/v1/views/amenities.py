@@ -40,9 +40,9 @@ def delete_amenity(a_id):
 @app_views.route('/amenities', methods=["POST"], strict_slashes=False)
 def create_amenity():
     ''' Creates an Amenity '''
-    try:
-        content = request.get_json()
-    except:
+
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
     name = content.get("name")
     if name is None:
@@ -58,17 +58,17 @@ def create_amenity():
 def update_amenity(a_id):
     ''' updates an amenity '''
 
-    try:
-        content = request.get_json()
-    except:
+    content = request.get_json()
+    if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
 
     my_amenity = storage.get("Amenity", a_id)
     if my_amenity is None:
         abort(404)
 
+    not_allowed = ["id", "created_at", "updated_at"]
     for key, value in content.items():
-        if key != "id" or key != "created_at" or key != "updated_at":
+        if key not in not_allowed:
             setattr(my_amenity, key, value)
 
     my_amenity.save()
