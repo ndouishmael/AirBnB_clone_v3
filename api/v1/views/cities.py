@@ -65,7 +65,6 @@ def post_cities(id):
 def update_cities(city_id):
     ''' update city object attributes with PUT method'''
 
-
     content = request.get_json()
     if content is None:
         return (jsonify({"error": "Not a JSON"}), 400)
