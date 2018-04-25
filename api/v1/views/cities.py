@@ -53,7 +53,9 @@ def post_cities(id):
     my_state = storage.get('State', id)
     if my_state is None:
         abort(404)
-    new_city = City(**content)
+    new_city = City()
+    new_city.state_id = id
+    new_city.name = name
     new_city.save()
 
     return (jsonify(new_city.to_dict()), 201)
@@ -62,6 +64,7 @@ def post_cities(id):
 @app_views.route('/cities/<city_id>', methods=["PUT"], strict_slashes=False)
 def update_cities(city_id):
     ''' update city object attributes with PUT method'''
+
 
     content = request.get_json()
     if content is None:
