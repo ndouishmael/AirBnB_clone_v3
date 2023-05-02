@@ -92,6 +92,7 @@ else:
                 for amenity in obj.amenities:
                     list_amenities.append(amenity.to_dict())
         return jsonify(list_amenities)
+        
     @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                      methods=['POST'])
     def create_place_amenity(place_id, amenity_id):
@@ -100,11 +101,13 @@ else:
         place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
         if place_obj == []:
             abort(404)
+            
         all_amenities = storage.all("Amenity").values()
         amenity_obj = [obj.to_dict() for obj in all_amenities
                        if obj.id == amenity_id]
         if amenity_obj == []:
             abort(404)
+            
         amenities = []
         for place in all_places:
             if place.id == place_id:
@@ -115,6 +118,7 @@ else:
                         amenities.append(amenity.to_dict())
                         return jsonify(amenities[0]), 200
         return jsonify(amenities[0]), 201
+        
     @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                      methods=['DELETE'])
     def delete_place_amenity(place_id, amenity_id):
@@ -123,12 +127,14 @@ else:
         place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
         if place_obj == []:
             abort(404)
+            
         all_amenities = storage.all("Amenity").values()
         amenity_obj = [obj.to_dict() for obj in all_amenities
                        if obj.id == amenity_id]
         if amenity_obj == []:
             abort(404)
         amenity_obj.remove(amenity_obj[0])
+        
         for obj in all_places:
             if obj.id == place_id:
                 if obj.amenities == []:
